@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Pedido</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Formulário de Pedido</h1>
+    <form id="pedido-form" action="enviar_pedido.php" method="post">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required><br><br>
+      
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="telefone" name="telefone" pattern="\([0-9]{2}\) [0-9]{5}-[0-9]{4}" placeholder="(99) 99999-9999" required><br><br>
+      
+      <label for="produtos">Produtos:</label>
+      <select id="produtos" name="produtos" multiple required>
+        <option value="produto_a">Produto A</option>
+        <option value="produto_b">Produto B</option>
+        <option value="produto_c">Produto C</option>
+      </select><br><br>
+      
+      <label for="meios_pagamento">Meios de Pagamento:</label>
+      <select id="meios_pagamento" name="meios_pagamento" required>
+        <option value="pix">Pix</option>
+        <option value="dinheiro">Dinheiro</option>
+        <option value="cartao_credito">Cartão de Crédito</option>
+        <option value="cartao_debito">Cartão de Débito</option>
+      </select><br><br>
+      
+      <label for="entrega">Entrega:</label>
+      <select id="entrega" name="entrega" required>
+        <option value="entrega">Entrega</option>
+        <option value="retirada">Retirada no Local</option>
+      </select><br><br>
+      
+      <label for="endereco">Endereço de Entrega:</label>
+      <input type="text" id="endereco" name="endereco"><br><br>
+      
+      <button type="button" id="whatsapp-btn">Enviar Pedido para o WhatsApp</button>
+    </form>
+  </div>
+  
+  <script>
+    document.getElementById("whatsapp-btn").addEventListener("click", function() {
+      var nome = document.getElementById("nome").value;
+      var telefone = document.getElementById("telefone").value;
+      var telefoneFormatado = telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      var produtos = Array.from(document.getElementById("produtos").selectedOptions).map(option => option.text).join(", ");
+      var meiosPagamento = document.getElementById("meios_pagamento").value;
+      var entrega = document.getElementById("entrega").value;
+      var endereco = document.getElementById("endereco").value;
+
+      var mensagem = "*RESUMO DO PEDIDO*";
+      mensagem += `\n\n👤CLIENTE: *${nome}*`;
+      mensagem += `\n📞TELEFONE: ${telefoneFormatado}`;
+      mensagem += `\n-----------------------------------`;
+      mensagem += `\nPRODUTOS: ${produtos}`;
+      mensagem += `\n💰FORMA DE PAGAMENTO: ${meiosPagamento}`;
+      mensagem += `\n-----------------------------------`;
+      mensagem += `\n\n🛵FORMA DE ENTREGA: ${entrega}`;
+      if (endereco !== "") {
+        mensagem += `\n📍ENDEREÇO DE ENTREGA: ${endereco}`;
+      }
+
+      var whatsappLink = "https://wa.me/5563992958242?text=" + encodeURIComponent(mensagem);
+      window.open(whatsappLink, "_blank");
+    });
+  </script>
+
+</body>
+</html>
